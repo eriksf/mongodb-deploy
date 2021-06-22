@@ -1,0 +1,12 @@
+#!/bin/sh
+
+#kubectl delete secret spark-mongo-secrets
+
+kubectl delete -f deploy.yml
+
+if [ "$1" == "allofit" ]
+then
+    kubectl delete -f pvc.yml  
+fi
+
+

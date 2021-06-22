@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spark-mongo
+spec:
+  selector:
+    matchLabels:
+      app: spark-mongo
+  template:
+    metadata:
+      labels:
+        app: spark-mongo
+    spec:
+      containers:
+        - name: spark-mongo
+          image: mongo:4.4.6-bionic
+          imagePullPolicy: Always
+          env:
+            - name: MONGO_INITDB_DATABASE
+              value: "spark"
+            - name: MONGO_INITDB_ROOT_USERNAME
+              value: "spark"
+            - name: MONGO_INITDB_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: spark-mongo-secrets
+                  key: mongo-password
+          ports:
+            - name: mongo
+              containerPort: 27017
+          volumeMounts:
+            - name: spark-mongo-data
+              mountPath: "/data/db"
+      volumes:
+        - name: spark-mongo-data
+          persistentVolumeClaim:
+            claimName: spark-mongo-vol01
+

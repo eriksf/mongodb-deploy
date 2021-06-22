@@ -1,0 +1,10 @@
+#!/bin/sh
+
+echo ""
+echo "*****    Show environment for containers ..."
+kubectl get all -o wide
+echo ""
+echo "MongoDB pwd: "
+kubectl get secret spark-mongo-secrets  -o json | jq -r '.data["mongo-password"]' | base64 -d
+echo "";echo ""
+
